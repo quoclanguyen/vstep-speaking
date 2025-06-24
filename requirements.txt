@@ -1,5 +1,5 @@
 azure-cognitiveservices-speech
-openai
+# openai
 fastapi
 uvicorn
 jinja2

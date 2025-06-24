@@ -1,7 +1,7 @@
 import azure.cognitiveservices.speech as speechsdk
 import google.generativeai as genai
 from _env import *
-from openai import OpenAI
+# from openai import OpenAI
 # Replace with your Azure credentials
 speech_key = azure_speech_api_key
 service_region = "eastasia"
@@ -38,34 +38,34 @@ def assessPronunciation(audio_path, reference_text):
     return json_result
 
 # === STEP 3: Evaluate the transcript based on the exam's question
-def assessTranscript(question, transcript, json_result):
-    client = OpenAI(api_key = openai_api_key)
-    prompt = (
-        f"Dựa vào câu hỏi này trong phần Speaking của bài thi VSTEP: \"{question}\", "
-        f"hãy đánh giá mức độ liên quan của đoạn văn thí sinh trả lời: \"{transcript}\" với đề bài. "
-        f"Dựa vào kết quả trong file json sau, đánh giá lỗi sai của thí sinh đó: {json_result}"
-    )
+# def assessTranscript(question, transcript, json_result):
+#     client = OpenAI(api_key = openai_api_key)
+#     prompt = (
+#         f"Dựa vào câu hỏi này trong phần Speaking của bài thi VSTEP: \"{question}\", "
+#         f"hãy đánh giá mức độ liên quan của đoạn văn thí sinh trả lời: \"{transcript}\" với đề bài. "
+#         f"Dựa vào kết quả trong file json sau, đánh giá lỗi sai của thí sinh đó: {json_result}"
+#     )
 
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",  # or "gpt-4" if available
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You are a professional English-speaking evaluation assistant. Your job is to assess users' spoken English "
-                    "based on pronunciation, fluency, grammar, vocabulary usage, and coherence. Provide objective, constructive, "
-                    "and clear feedback. When necessary, offer specific suggestions for improvement. Assume the user may be "
-                    "preparing for VSTEP exam, and tailor your feedback accordingly."
-                )
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+#     response = client.chat.completions.create(
+#         model="gpt-3.5-turbo",  # or "gpt-4" if available
+#         messages=[
+#             {
+#                 "role": "system",
+#                 "content": (
+#                     "You are a professional English-speaking evaluation assistant. Your job is to assess users' spoken English "
+#                     "based on pronunciation, fluency, grammar, vocabulary usage, and coherence. Provide objective, constructive, "
+#                     "and clear feedback. When necessary, offer specific suggestions for improvement. Assume the user may be "
+#                     "preparing for VSTEP exam, and tailor your feedback accordingly."
+#                 )
+#             },
+#             {
+#                 "role": "user",
+#                 "content": prompt
+#             }
+#         ]
+#     )
 
-    return response.choices[0].message.content
+#     return response.choices[0].message.content
 def assessTranscript_G(question, transcript, json_result):
     genai.configure(api_key = gemini_api_key)
     prompt = (
