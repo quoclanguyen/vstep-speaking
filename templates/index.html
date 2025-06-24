@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='icons/favicon.ico') }}">
+    <title>VSTEP Speaking Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        function showLoading() {
+            document.getElementById("loading-overlay").classList.remove("hidden");
+        }
+    </script>
+</head>
+<!-- Loading overlay -->
+<div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg px-6 py-4 shadow-md flex items-center space-x-4">
+        <svg class="animate-spin h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span class="text-indigo-600 font-medium text-lg">Evaluating...</span>
+    </div>
+</div>
+
+<body class="bg-gray-200 text-gray-800 min-h-screen flex items-center justify-center p-6">
+
+    <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-l space-y-6">
+        <h1 class="text-2xl font-bold text-center text-indigo-600">Demo chấm điểm speaking</h1>
+
+        <form action="/upload" method="post" enctype="multipart/form-data" class="space-y-4" onsubmit="showLoading()">
+            <!-- File input -->
+            <input type="file" name="file" accept=".wav" required
+                class="block w-full text-sm text-gray-700 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-400">
+
+            <!-- Question input -->
+            <textarea name="question" rows="3" placeholder="Điền đề bài tại đây..."
+                class="w-full mt-2 text-sm text-gray-800 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required></textarea>
+
+            <div class="flex justify-center">
+                <button type="submit"
+                    class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
+                    Chấm điểm
+                </button>
+            </div>
+        </form>
+
+        {% if filename %}
+        <div class="mt-6 space-y-4">
+            <div>
+                <h2 class="text-lg font-semibold">Preview:</h2>
+                <audio controls class="w-full mt-2">
+                    <source src="{{ url_for('static', path='uploads/' + filename) }}" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold">Kết quả:</h3>
+                <div id="markdown-result"
+                    class="mt-2 p-4 bg-gray-100 border rounded-md text-gray-700 prose prose-sm max-w-none"
+                    data-content="{{ result | escape }}"></div>
+
+                <script>
+                    const rawMarkdown = document.getElementById("markdown-result").dataset.content;
+                    document.getElementById("markdown-result").innerHTML = marked.parse(rawMarkdown);
+                </script>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>
