@@ -1,9 +1,11 @@
 import azure.cognitiveservices.speech as speechsdk
 import google.generativeai as genai
-from _env import *
+import os   
 # from openai import OpenAI
 # Replace with your Azure credentials
-speech_key = azure_speech_api_key
+speech_key = os.environ.get("AZURE_SPEECH_API_KEY")
+service_region = os.environ.get("AZURE_SERVICE_REGION", "eastasia")
+gemini_api_key = os.environ.get("GEMINI_API_KEY")
 service_region = "eastasia"
 
 
